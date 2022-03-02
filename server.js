@@ -24,6 +24,16 @@ const Game = db.define("game", {
 
 app.get('/', (req, res)=>res.sendFile(path.join(__dirname, 'index.html')))
 
+app.delete('/api/games/:id', async(req, res, next)=>{
+    try{
+        const game = await Game.findByPk(req.params.id)
+        await game.destroy()
+        res.sendStatus(204)
+    }catch(err){
+        next(err)
+    }
+})
+
 app.get('/api/games/:id', async(req, res, next)=>{
     try{
         const game = await Game.findByPk(req.params.id)
