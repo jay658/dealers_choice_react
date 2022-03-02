@@ -31,6 +31,8 @@
             return(
                 <div>
                     {game.name} is a {game.genre} game 
+                    <div> </div>
+                    <div onClick = {()=> props.reset()}>Go back</div>
                 </div>
             )
         }
@@ -44,7 +46,11 @@
                 }
                 this.selectGame = this.selectGame.bind(this)
                 this.deleteGame = this.deleteGame.bind(this)
-                this.componentDidMount = this.componentDidMount.bind(this)
+                this.reset = this.reset.bind(this)
+            }
+
+            reset(){
+                this.setState({ selectedGame: {}})
             }
 
             async deleteGame(deletedGame){
@@ -83,7 +89,7 @@
                         <div>
                             <h1>{selectedGame.name}</h1>
                             <h3>
-                                <OneGame selectedGame = {selectedGame}/> 
+                                <OneGame selectedGame = {selectedGame} reset={this.reset}/> 
                             </h3>
                         </div>
                     )
