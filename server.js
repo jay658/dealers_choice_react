@@ -22,7 +22,19 @@ const Game = db.define("game", {
     }
 })
 
+app.use(express.json())
+
 app.get('/', (req, res)=>res.sendFile(path.join(__dirname, 'index.html')))
+
+app.post('/api/games', async(req, res, next)=>{
+    try{
+        console.log(`here is the req.body: ${req.body}`)
+        const game = await Game.create({name:req.body.name, genre:req.body.genre})
+        res.send(await Game.findAll())
+    }catch(ex){
+        next(ex)
+    }
+})
 
 app.delete('/api/games/:id', async(req, res, next)=>{
     try{

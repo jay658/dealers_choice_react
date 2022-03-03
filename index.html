@@ -11,7 +11,6 @@
 
         const GameList = (props) => {
             const games = props.games
-            console.log(props)
             return (
                 games.map(game=>{
                     return(
@@ -20,7 +19,6 @@
                                 <span onClick = {() => props.selectGame(game.id)}>{game.name} is a {game.genre} game</span>
                                 <button onClick = {()=> props.deleteGame(game)}>x</button>
                             </li>
-                            
                         </div>
                     )
                 })
@@ -31,8 +29,8 @@
             const game = props.selectedGame
             return(
                 <div>
-                    {game.name} is a {game.genre} game 
-                    <div onClick = {()=> props.reset()}>Go back</div>
+                    {game.name} is a {game.genre} game
+                    <h5 onClick = {()=> props.reset()}>Go back</h5>
                 </div>
             )
         }
@@ -47,10 +45,25 @@
                 this.selectGame = this.selectGame.bind(this)
                 this.deleteGame = this.deleteGame.bind(this)
                 this.reset = this.reset.bind(this)
+                this.addGame = this.addGame.bind(this)
             }
 
             reset(){
                 this.setState({ selectedGame: {}})
+            }
+
+            async addGame(event){
+                try{
+                    event.preventDefault()
+                    const gameName = document.querySelector('#name').value
+                    const gameGenre = document.querySelector('#genre').value
+                    console.log(`name: ${gameName}, genre: ${gameGenre}`)
+                    const response = await axios.post('/api/games', {name:gameName, genre:gameGenre})
+                    const newData = response.data
+                    this.setState({games:newData})
+                }catch(err){
+                    console.log('there was an error creating a game',err)
+                }
             }
 
             async deleteGame(deletedGame){
@@ -89,7 +102,7 @@
                         <div>
                             <h1>{selectedGame.name}</h1>
                             <h3>
-                                <OneGame selectedGame = {selectedGame} reset={this.reset}/> 
+                                <OneGame selectedGame = {selectedGame} reset = {this.reset}/> 
                             </h3>
                         </div>
                     )
@@ -97,7 +110,18 @@
                     return (
                     <div>
                         <h1>Games</h1>
-                            <GameList games = {games} selectGame = {this.selectGame} deleteGame = {this.deleteGame}/>
+                        <GameList games = {games} selectGame = {this.selectGame} deleteGame = {this.deleteGame}/>
+                        <form method = 'POST' onSubmit={this.addGame}>
+                            <div>
+                                <label for="game name">Game name: </label>
+                                <input name = "game name" id="name"/>
+                            </div>
+                            <div>
+                                <label for="game genre">Game genre: </label>
+                                <input name = "game genre" id ="genre"/>
+                            </div>
+                            <button type = 'submit'>submit</button>
+                        </form>
                     </div>
                 )
                 }
