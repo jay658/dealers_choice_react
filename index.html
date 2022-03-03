@@ -16,10 +16,11 @@
                 games.map(game=>{
                     return(
                         <div>
-                            <li onClick = {() => props.selectGame(game.id)}>
-                                {game.name} is a {game.genre} game 
+                            <li>
+                                <span onClick = {() => props.selectGame(game.id)}>{game.name} is a {game.genre} game</span>
+                                <button onClick = {()=> props.deleteGame(game)}>x</button>
                             </li>
-                            <button onClick = {()=> props.deleteGame(game)}>x</button>
+                            
                         </div>
                     )
                 })
@@ -31,7 +32,6 @@
             return(
                 <div>
                     {game.name} is a {game.genre} game 
-                    <div> </div>
                     <div onClick = {()=> props.reset()}>Go back</div>
                 </div>
             )
